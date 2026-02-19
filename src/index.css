@@ -1,0 +1,521 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS — DevForge Design System
+   Based on design-prd-devresume.md v1.0
+   ============================================================ */
+
+@theme {
+  /* ── Font Families ── */
+  --font-display: "Syne", sans-serif;
+  --font-sans: "DM Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* ── Background Layer Stack (Dark Theme) ── */
+  --color-bg-void: #080B12;
+  --color-bg-base: #0D1117;
+  --color-bg-elevated: #141A24;
+  --color-bg-overlay: #1C2333;
+  --color-bg-subtle: #232D3F;
+
+  /* ── Border / Divide ── */
+  --color-border-faint: #1E2A3A;
+  --color-border-default: #263044;
+  --color-border-active: #3A4F6B;
+
+  /* ── Brand / Accent (Electric Blue) ── */
+  --color-accent-primary: #3B82F6;
+  --color-accent-secondary: #60A5FA;
+  --color-accent-glow: #3B82F620;
+  --color-accent-subtle: #3B82F610;
+
+  /* ── Semantic Colors ── */
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-info: #6366F1;
+
+  --color-success-subtle: #22C55E12;
+  --color-warning-subtle: #F59E0B12;
+  --color-danger-subtle: #EF444412;
+  --color-info-subtle: #6366F112;
+
+  /* ── Text Hierarchy ── */
+  --color-text-primary: #F1F5F9;
+  --color-text-secondary: #94A3B8;
+  --color-text-tertiary: #4E6380;
+  --color-text-disabled: #2D3E52;
+  --color-text-accent: #60A5FA;
+  --color-text-code: #7DD3FC;
+
+  /* ── Spacing (4px base unit) ── */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+
+  /* ── Border Radius ── */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ── Elevation / Shadows ── */
+  --shadow-none: none;
+  --shadow-sm: 0 0 0 1px var(--color-border-faint);
+  --shadow-md: 0 0 0 1px var(--color-border-default), 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 0 0 1px var(--color-border-active), 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 0 1px var(--color-accent-primary), 0 0 24px var(--color-accent-glow);
+  --shadow-float: 0 0 0 1px var(--color-border-default), 0 20px 60px rgba(0, 0, 0, 0.6);
+
+  /* ── Motion / Easing ── */
+  --ease-default: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Motion / Durations ── */
+  --duration-instant: 80ms;
+  --duration-fast: 150ms;
+  --duration-default: 250ms;
+  --duration-slow: 400ms;
+  --duration-crawl: 700ms;
+
+  /* ── Legacy compatibility aliases (for Tailwind classes used in existing code) ── */
+  --color-dark-900: #080B12;
+  --color-dark-800: #0D1117;
+  --color-dark-700: #141A24;
+  --color-dark-600: #1C2333;
+  --color-dark-500: #232D3F;
+
+  --color-accent-400: #60A5FA;
+  --color-accent-500: #3B82F6;
+  --color-accent-600: #2563EB;
+
+  --color-glow-blue: #3B82F6;
+  --color-glow-purple: #6366F1;
+  --color-glow-cyan: #06b6d4;
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ============================================================
+   TYPOGRAPHY SCALE — Utility Classes
+   ============================================================ */
+
+.text-display-xl {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 64px;
+  line-height: 1.0;
+  letter-spacing: -2px;
+}
+
+.text-display-l {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+}
+
+.text-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.text-h2 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.text-h3 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.text-body-l {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.text-body-m {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.text-body-s {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.text-label {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.text-code {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   GRADIENT TEXT
+   ============================================================ */
+
+.gradient-text {
+  background: linear-gradient(135deg, #ffffff 0%, #60A5FA 50%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   CTA GRADIENT BUTTON
+   ============================================================ */
+
+.btn-cta {
+  background: linear-gradient(135deg, var(--color-accent-primary), #2563EB);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--duration-default) var(--ease-default);
+}
+
+.btn-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #2563EB, var(--color-accent-primary));
+  opacity: 0;
+  transition: opacity var(--duration-default) var(--ease-smooth);
+}
+
+.btn-cta:hover::before {
+  opacity: 1;
+}
+
+.btn-cta:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 30px rgba(59, 130, 246, 0.4),
+    0 0 60px rgba(59, 130, 246, 0.2);
+}
+
+.btn-cta:active {
+  transform: scale(0.97);
+  transition: transform var(--duration-instant) var(--ease-exit);
+}
+
+/* ============================================================
+   GLASS CARD / GLASS PANEL
+   ============================================================ */
+
+.glass-card {
+  background: rgba(20, 26, 36, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  transition: all var(--duration-default) var(--ease-default);
+}
+
+.glass-card:hover {
+  background: rgba(20, 26, 36, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
+}
+
+/* Floating Glass Panel — modals, tooltips, score panels */
+.glass-panel {
+  background: rgba(20, 26, 36, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ============================================================
+   DOT GRID BACKGROUND
+   ============================================================ */
+
+.dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ============================================================
+   HERO GLOW EFFECT
+   ============================================================ */
+
+.hero-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+/* ============================================================
+   GRADIENT BORDER
+   ============================================================ */
+
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.5), rgba(99, 102, 241, 0.5));
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ============================================================
+   SKELETON LOADER
+   ============================================================ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-elevated) 25%,
+    var(--color-bg-subtle) 50%,
+    var(--color-bg-elevated) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+/* Fade-in-up (section entrance) */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up var(--duration-crawl) var(--ease-enter) forwards;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
+}
+
+/* Pulse glow for CTA */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(59, 130, 246, 0.5),
+      0 0 80px rgba(59, 130, 246, 0.2);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Modal enter/exit */
+@keyframes modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes modal-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes backdrop-enter {
+  from { opacity: 0; }
+  to { opacity: 0.6; }
+}
+
+@keyframes backdrop-exit {
+  from { opacity: 0.6; }
+  to { opacity: 0; }
+}
+
+/* Toast slide-in */
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-exit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* AI suggestion appearance */
+@keyframes suggestion-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY — Reduced Motion
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-fade-in-up,
+  .animate-pulse-glow {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .skeleton {
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY — Focus Rings
+   ============================================================ */
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   SCROLLBAR STYLING (Dark Theme)
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-void);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-default);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-active);
+}
