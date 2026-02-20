@@ -3,8 +3,6 @@ import { api } from '../lib/api'
 import type { MyResumeItem } from '../lib/api'
 import { useAuth } from '../contexts/AuthContext'
 
-const CREDITS_KEY = 'flasheng_credits'
-
 export function useResumes() {
   const { session } = useAuth()
   const [resumes, setResumes] = useState<MyResumeItem[]>([])
@@ -43,13 +41,32 @@ export function useResumes() {
 }
 
 export function useCredits() {
-  const [credits, setCredits] = useState<number>(() => {
-    return parseInt(localStorage.getItem(CREDITS_KEY) || '0', 10)
-  })
+  const { session } = useAuth()
+  const [credits, setCredits] = useState<number>(0)
+  const [loading, setLoading] = useState(true)
 
-  const refresh = useCallback(() => {
-    setCredits(parseInt(localStorage.getItem(CREDITS_KEY) || '0', 10))
-  }, [])
+  const refresh = useCallback(async () => {
+    if (!session?.access_token) {
+      setCredits(0)
+      setLoading(false)
+      return
+    }
 
-  return { credits, refresh }
+    try {
+      const profile = await api.getUserProfile(session.access_token)
+      setCredits(profile.credits)
+    } catch (err) {
+      console.error('Failed to fetch credits:', err)
+      setCredits(0)
+    } finally {
+      setLoading(false)
+    }
+  }, [session?.access_token])
+
+  useEffect(() => {
+    setLoading(true)
+    refresh()
+  }, [refresh])
+
+  return { credits, loading, refresh }
 }

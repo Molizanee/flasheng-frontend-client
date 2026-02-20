@@ -1,15 +1,16 @@
 import { useState, useCallback, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { api } from '../lib/api'
 import type { ResumeJobResponse } from '../lib/api'
-import FileUpload from '../components/FileUpload'
+import GenerationOptionsForm from '../components/GenerationOptions'
+import { type GenerationOptions, defaultGenerationOptions } from '../lib/generation-options'
 import PixPayment from '../components/PixPayment'
 import GenerationProgress from '../components/GenerationProgress'
 import Button from '../components/ui/Button'
 import { ArrowLeft, Zap, Check, XCircle } from 'lucide-react'
 
-type Step = 'upload' | 'payment' | 'generating' | 'complete' | 'error'
+type Step = 'options' | 'payment' | 'generating' | 'complete' | 'error'
 
 interface SavedResume {
   id: string
@@ -32,43 +33,60 @@ function saveResume(resume: SavedResume) {
 export default function Generate() {
   const { providerToken, session } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const planId = searchParams.get('plan')
 
-  const [step, setStep] = useState<Step>('upload')
-  const [linkedinPdf, setLinkedinPdf] = useState<File | null>(null)
+  const [step, setStep] = useState<Step>('options')
   const [jobId, setJobId] = useState<string | null>(null)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [credits, setCredits] = useState<number>(0)
+  const [creditsLoading, setCreditsLoading] = useState(true)
+  const [generationOptions, setGenerationOptions] = useState<GenerationOptions>(defaultGenerationOptions)
 
   useEffect(() => {
     if (!session?.access_token) return
 
+    setCreditsLoading(true)
     api
-      .getCreditBalance(session.access_token)
+      .getUserProfile(session.access_token)
       .then((result) => setCredits(result.credits))
       .catch((err) => console.error('Failed to fetch credits:', err))
+      .finally(() => setCreditsLoading(false))
   }, [session])
 
-  const handleStartGeneration = useCallback(async () => {
-    if (!linkedinPdf || !providerToken) {
-      setErrorMsg('Arquivo PDF ou token do GitHub nao encontrado. Faca login novamente.')
+  const handleStartGeneration = useCallback(async (options?: GenerationOptions) => {
+    const opts = options ?? generationOptions
+
+    if (!providerToken) {
+      setErrorMsg('Token do GitHub nao encontrado. Faca login novamente.')
       setStep('error')
       return
     }
 
+
     try {
-      const result = await api.generateResume(providerToken, linkedinPdf, session?.access_token ?? undefined)
+      const result = await api.generateResume(
+        providerToken,
+        undefined,
+        session?.access_token,
+        {
+          jobUrl: opts.jobUrl || undefined,
+          language: opts.language,
+          platformContent: opts.platformContent,
+        }
+      )
       setJobId(result.job_id)
       setStep('generating')
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : 'Erro ao iniciar geracao')
       setStep('error')
     }
-  }, [linkedinPdf, providerToken, session])
+  }, [providerToken, session, generationOptions])
 
   const handlePaymentConfirmed = useCallback(async () => {
     if (!session?.access_token) return
     try {
-      const result = await api.getCreditBalance(session.access_token)
+      const result = await api.getUserProfile(session.access_token)
       setCredits(result.credits)
     } catch (err) {
       console.error('Failed to fetch credits:', err)
@@ -76,11 +94,13 @@ export default function Generate() {
     handleStartGeneration()
   }, [session, handleStartGeneration])
 
-  const handleUploadContinue = () => {
-    if (!linkedinPdf) return
-
+  const handleOptionsContinue = (options: GenerationOptions) => {
+    setGenerationOptions(options)
+    
+    if (creditsLoading) return
+    
     if (credits > 0) {
-      handleStartGeneration()
+      handleStartGeneration(options)
     } else {
       setStep('payment')
     }
@@ -111,14 +131,22 @@ export default function Generate() {
     setStep('error')
   }, [])
 
-  const stepIndicators = [
-    { key: 'upload', label: 'Upload' },
-    { key: 'payment', label: 'Pagamento' },
-    { key: 'generating', label: 'Geracao' },
-  ]
+  const hasCredits = credits > 0
+
+  const stepIndicators = hasCredits
+    ? [
+        { key: 'options', label: 'Opções' },
+        { key: 'generating', label: 'Geração' },
+      ]
+    : [
+        { key: 'options', label: 'Opções' },
+        { key: 'payment', label: 'Pagamento' },
+        { key: 'generating', label: 'Geração' },
+      ]
 
   const currentStepIndex =
-    step === 'upload' ? 0 : step === 'payment' ? 1 : 2
+    step === 'options' ? 0 :
+    step === 'payment' || step === 'generating' ? (hasCredits ? 1 : 2) : 0
 
   return (
     <div className="dot-grid relative min-h-screen bg-bg-void">
@@ -131,10 +159,10 @@ export default function Generate() {
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-20">
         {/* Back link */}
         <Link
-          to={step === 'generating' ? '#' : '/dashboard'}
+          to={step === 'generating' || step === 'payment' ? '#' : '/dashboard'}
           className="mb-10 flex items-center gap-2 text-body-s text-text-tertiary transition-colors hover:text-text-secondary"
           onClick={(e) => {
-            if (step === 'generating') e.preventDefault()
+            if (step === 'generating' || step === 'payment') e.preventDefault()
           }}
         >
           <ArrowLeft className="h-4 w-4" />
@@ -192,47 +220,22 @@ export default function Generate() {
 
         {/* Step content */}
         <div className="glass-card w-full max-w-lg rounded-2xl p-8 md:p-10">
-          {step === 'upload' && (
-            <>
-              <h1 className="text-h1 mb-2 text-center text-text-primary">
-                Gerar Seu Resumo
-              </h1>
-              <p className="mb-8 text-center text-text-tertiary">
-                Faca upload do seu perfil do LinkedIn exportado em PDF para
-                gerar seu resumo otimizado com IA.
-              </p>
-
-              <div className="flex flex-col gap-6">
-                <FileUpload onFileSelect={setLinkedinPdf} file={linkedinPdf} />
-
-                {credits > 0 && (
-                  <div className="rounded-xl bg-accent-subtle px-4 py-3 text-center">
-                    <p className="text-body-s text-text-accent">
-                      Voce tem <span className="font-bold">{credits}</span>{' '}
-                      credito{credits !== 1 ? 's' : ''} disponivel
-                      {credits !== 1 ? 'is' : ''}
-                    </p>
-                  </div>
-                )}
-
-                <Button
-                  onClick={handleUploadContinue}
-                  size="lg"
-                  variant="primary"
-                  className="w-full"
-                  disabled={!linkedinPdf}
-                >
-                  <Zap className="mr-2 h-5 w-5" />
-                  {credits > 0 ? 'Gerar Resumo' : 'Continuar para Pagamento'}
-                </Button>
-              </div>
-            </>
+          {step === 'options' && (
+            <GenerationOptionsForm
+              initialOptions={generationOptions}
+              loading={creditsLoading}
+              onSubmit={(options) => {
+                handleOptionsContinue(options)
+              }}
+              onBack={() => navigate('/dashboard')}
+            />
           )}
 
           {step === 'payment' && (
             <PixPayment
               onPaymentConfirmed={handlePaymentConfirmed}
               token={session?.access_token ?? ''}
+              initialPlanId={planId || undefined}
             />
           )}
 
@@ -271,7 +274,7 @@ export default function Generate() {
               <div className="flex flex-col gap-3">
                 <Button
                   onClick={() => {
-                    setStep('upload')
+                    setStep('options')
                     setErrorMsg(null)
                     setJobId(null)
                   }}
