@@ -101,6 +101,26 @@ export interface CreditBalanceResponse {
   credits: number
 }
 
+export interface CreditPlanResponse {
+  id: string
+  name: string
+  credits_amount: number
+  price_brl_cents: number
+  is_active: boolean
+}
+
+export interface UserProfileResponse {
+  id: string
+  linkedin_url: string | null
+  credits: number
+  created_at: string
+  updated_at: string
+}
+
+export interface UserProfileUpdate {
+  linkedin_url: string
+}
+
 // --- API Methods ---
 
 export const api = {
@@ -114,12 +134,29 @@ export const api = {
 
   generateResume(
     githubToken: string,
-    linkedinPdf: File,
+    linkedinPdf?: File,
     token?: string,
+    options?: {
+      jobUrl?: string
+      language?: 'pt-br' | 'en'
+      platformContent?: 'linkedin' | 'github' | 'mixed'
+    }
   ): Promise<ResumeJobCreatedResponse> {
     const formData = new FormData()
     formData.append('github_token', githubToken)
-    formData.append('linkedin_pdf', linkedinPdf)
+    if (linkedinPdf) {
+      formData.append('linkedin_pdf', linkedinPdf)
+    }
+
+    if (options?.jobUrl) {
+      formData.append('linkedin_job_url', options.jobUrl)
+    }
+    if (options?.language) {
+      formData.append('language', options.language)
+    }
+    if (options?.platformContent) {
+      formData.append('platform_content', options.platformContent)
+    }
 
     return request('/api/v1/resume/generate', {
       method: 'POST',
@@ -136,18 +173,38 @@ export const api = {
     return request(`/api/v1/resume/${jobId}/download`)
   },
 
-  createPayment(token: string): Promise<PaymentResponse> {
-    return request('/api/v1/payment/create', {
-      method: 'POST',
-      token,
-    })
-  },
-
   getPaymentStatus(paymentId: string, token: string): Promise<PaymentStatusResponse> {
     return request(`/api/v1/payment/${paymentId}`, { token })
   },
 
   getCreditBalance(token: string): Promise<CreditBalanceResponse> {
     return request('/api/v1/payment/balance', { token })
+  },
+
+  getCreditPlans(): Promise<CreditPlanResponse[]> {
+    return request('/api/v1/payment/plans')
+  },
+
+  getUserProfile(token: string): Promise<UserProfileResponse> {
+    return request('/api/v1/users/me', { token })
+  },
+
+  updateUserProfile(
+    data: UserProfileUpdate,
+    token: string
+  ): Promise<UserProfileResponse> {
+    return request('/api/v1/users/me', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      token,
+    })
+  },
+
+  createPayment(token: string, planId: string): Promise<PaymentResponse> {
+    return request('/api/v1/payment/create', {
+      method: 'POST',
+      body: JSON.stringify({ plan_id: planId }),
+      token,
+    })
   },
 }

@@ -1,14 +1,18 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import type { User, Session } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
+import { api, type UserProfileResponse } from '../lib/api'
 
 interface AuthContextType {
   user: User | null
   session: Session | null
   providerToken: string | null
+  userProfile: UserProfileResponse | null
   loading: boolean
   signInWithGitHub: () => Promise<void>
   signOut: () => Promise<void>
+  fetchUserProfile: () => Promise<void>
+  updateUserProfile: (data: { linkedin_url: string }) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -21,7 +25,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [providerToken, setProviderToken] = useState<string | null>(
     () => localStorage.getItem(PROVIDER_TOKEN_KEY)
   )
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null)
   const [loading, setLoading] = useState(!!supabase) // only loading if supabase is configured
+
+  const fetchUserProfile = useCallback(async () => {
+    if (!session?.access_token) return
+    try {
+      const profile = await api.getUserProfile(session.access_token)
+      setUserProfile(profile)
+    } catch (err) {
+      console.error('Failed to fetch user profile:', err)
+    }
+  }, [session])
+
+  const updateUserProfileFn = useCallback(async (data: { linkedin_url: string }) => {
+    if (!session?.access_token) return
+    try {
+      const profile = await api.updateUserProfile(data, session.access_token)
+      setUserProfile(profile)
+    } catch (err) {
+      console.error('Failed to update user profile:', err)
+      throw err
+    }
+  }, [session])
 
   useEffect(() => {
     if (!supabase) {
@@ -60,6 +86,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe()
   }, [])
 
+  useEffect(() => {
+    if (session?.access_token) {
+      fetchUserProfile()
+    } else {
+      setUserProfile(null)
+    }
+  }, [session, fetchUserProfile])
+
   const signInWithGitHub = useCallback(async () => {
     if (!supabase) {
       throw new Error(
@@ -90,7 +124,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, session, providerToken, loading, signInWithGitHub, signOut }}
+      value={{
+        user,
+        session,
+        providerToken,
+        userProfile,
+        loading,
+        signInWithGitHub,
+        signOut,
+        fetchUserProfile,
+        updateUserProfile: updateUserProfileFn,
+      }}
     >
       {children}
     </AuthContext.Provider>

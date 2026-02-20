@@ -1,5 +1,5 @@
 import { useAuth } from "../contexts/AuthContext";
-import { Zap, Linkedin, Github, Sparkles } from "lucide-react";
+import { Linkedin, Github, Sparkles } from "lucide-react";
 import Badge from "./ui/Badge";
 import Button from "./ui/Button";
 
