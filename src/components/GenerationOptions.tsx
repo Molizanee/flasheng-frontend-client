@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { z } from 'zod'
-import { Briefcase, Globe, Linkedin, Github, Layers } from 'lucide-react'
+import { Globe, Linkedin, Github, Layers } from 'lucide-react'
 import Button from '../components/ui/Button'
 import { type GenerationOptions } from '../lib/generation-options'
 
@@ -23,7 +23,7 @@ export default function GenerationOptionsForm({
   initialOptions,
   loading = false,
 }: GenerationOptionsFormProps) {
-  const [jobUrl, setJobUrl] = useState(initialOptions?.jobUrl || '')
+  const [jobUrl, _setJobUrl] = useState(initialOptions?.jobUrl || '')
   const [language, setLanguage] = useState<'pt-br' | 'en'>(
     initialOptions?.language || 'en'
   )
