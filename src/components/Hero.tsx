@@ -69,7 +69,7 @@ export default function Hero() {
         </div>
 
         {/* Animated Resume Showcase */}
-        <div className="animate-fade-in-up animation-delay-700 mt-16 md:mt-24 w-full">
+        <div className="hidden md:block animate-fade-in-up animation-delay-700 mt-16 md:mt-24 w-full">
           <ResumeShowcase />
         </div>
       </div>
