@@ -404,6 +404,18 @@ body {
   animation-delay: 600ms;
 }
 
+@media (max-width: 767px) {
+  .animate-fade-in-up {
+    animation-duration: var(--duration-default) !important;
+  }
+  .animation-delay-200,
+  .animation-delay-400,
+  .animation-delay-600,
+  .animation-delay-700 {
+    animation-delay: 0ms !important;
+  }
+}
+
 /* Pulse glow for CTA */
 @keyframes pulse-glow {
   0%, 100% {
