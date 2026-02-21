@@ -66,7 +66,7 @@ export default function LinkedInOnboardingModal({ onSubmit }: LinkedInOnboarding
           </div>
 
           <h2 id="onboarding-title" className="text-h2 mb-2 text-text-primary">
-            Bem-vindo ao FlashEng!
+            Bem-vindo ao core!
           </h2>
           <p className="mb-6 text-body-m text-text-tertiary">
             Para continuar, precisamos do seu perfil do LinkedIn. Cole a URL do

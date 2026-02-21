@@ -1,6 +1,7 @@
 import { useAuth } from '../contexts/AuthContext'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, Zap, Github } from 'lucide-react'
+import { CoreLogo } from '../components/CoreLogo'
 
 export default function Login() {
   const { signInWithGitHub, loading } = useAuth()
@@ -33,17 +34,12 @@ export default function Login() {
 
         {/* Logo */}
         <div className="mb-8 flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-md bg-gradient-to-br from-accent-primary to-accent-secondary">
-            <Zap className="h-6 w-6 text-white" strokeWidth={2.5} />
-          </div>
-          <span className="font-display text-2xl font-bold text-text-primary">
-            Flash<span className="text-accent-secondary">Eng</span>
-          </span>
+          <CoreLogo/>
         </div>
 
         <div className="glass-card w-full max-w-md rounded-xl p-8 md:p-10">
           <h1 className="text-h1 mb-2 text-center text-text-primary">
-            Entrar no FlashEng
+            Entrar no core
           </h1>
           <p className="text-body-m mb-8 text-center text-text-secondary">
             Conecte sua conta do GitHub para gerar resumos profissionais

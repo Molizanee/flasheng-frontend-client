@@ -1,4 +1,5 @@
-import { FilePlus } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { FilePlus, Sparkles } from 'lucide-react'
 import ResumeCard from './ResumeCard'
 import type { MyResumeItem } from '../../lib/api'
 
@@ -29,17 +30,24 @@ export default function ResumeGrid({ resumes, loading }: ResumeGridProps) {
 
   if (resumes.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-bg-elevated">
-          <FilePlus className="h-10 w-10 text-text-disabled" />
+      <div className="flex flex-col items-center justify-center py-24 text-center">
+        <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-accent-primary/10 ring-1 ring-primary/10">
+          <FilePlus className="h-11 w-11 text-primary" />
         </div>
-        <h3 className="text-h3 mb-2 text-text-tertiary">
-          Nenhum resumo gerado
+        <h3 className="text-h3 mb-3 text-text-primary">
+          Nenhum resumo ainda
         </h3>
-        <p className="text-body-m max-w-sm text-text-disabled">
-          Clique em "Gerar Novo Resumo" para criar seu primeiro resumo
-          profissional otimizado com IA.
+        <p className="text-body-m max-w-md text-text-tertiary mb-8">
+          Crie seu primeiro resumo profissional otimizado com IA em poucos
+          cliques. É rápido e fácil!
         </p>
+        <Link
+          to="/generate"
+          className="inline-flex items-center gap-2 rounded-lg bg-accent-primary px-6 py-3 text-body-m font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
+        >
+          <Sparkles className="h-5 w-5" />
+          Gerar Meu Primeiro Resumo
+        </Link>
       </div>
     )
   }

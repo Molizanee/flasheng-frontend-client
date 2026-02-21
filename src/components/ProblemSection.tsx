@@ -1,42 +1,41 @@
-import { AlertTriangle, Code, Zap } from 'lucide-react'
+import { Clock, Unplug, Sparkles } from 'lucide-react'
 import Badge from './ui/Badge'
 import GlassCard from './ui/GlassCard'
 
 const problems = [
   {
-    icon: <AlertTriangle className="h-6 w-6" />,
-    title: 'Agentes de IA Filtram Candidatos',
+    icon: <Clock className="h-6 w-6" />,
+    title: 'Montar um Currículo Leva Horas',
     description:
-      'Recrutadores modernos usam agentes de IA para analisar e filtrar curriculos automaticamente. Seu perfil do LinkedIn nao foi projetado para ser interpretado por essas ferramentas — e voce esta perdendo oportunidades sem saber.',
+      'Você gasta tempo formatando, escrevendo e revisando um currículo que nunca reflete de verdade suas habilidades mais recentes. E quando finalmente termina, ele já está desatualizado.',
   },
   {
-    icon: <Code className="h-6 w-6" />,
-    title: 'Seu GitHub Conta a Historia Real',
+    icon: <Unplug className="h-6 w-6" />,
+    title: 'LinkedIn e GitHub Estão Desconectados',
     description:
-      'Seus repositorios, commits e READMEs contem suas contribuicoes mais recentes e relevantes. Recrutadores que analisam seu codigo veem um profissional diferente do que o LinkedIn mostra.',
+      'Suas melhores provas de trabalho estão espalhadas: experiências no LinkedIn, código no GitHub. Nenhum currículo tradicional une as duas fontes de forma inteligente.',
   },
   {
-    icon: <Zap className="h-6 w-6" />,
-    title: 'FlashEng Une os Dois Mundos',
+    icon: <Sparkles className="h-6 w-6" />,
+    title: 'O core Resolve Isso',
     description:
-      'O FlashEng combina seu perfil LinkedIn com seus dados do GitHub para criar um resumo profissional que se destaca tanto para agentes de IA quanto para recrutadores humanos.',
+      'O core automatiza a leitura do seu perfil LinkedIn e GitHub, mesclando tudo em um currículo otimizado — em português ou inglês — pronto para você se candidatar rápido.',
   },
 ]
 
 export default function ProblemSection() {
   return (
-    <section id="problema" className="relative py-24">
+    <section id="problema" className="relative py-12 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-16 max-w-2xl">
           <Badge className="mb-6">O Problema</Badge>
           <h2 className="text-h1 mb-6 md:text-display-l">
-            Curriculos do LinkedIn{' '}
-            <span className="gradient-text">Nao Foram Feitos Para IA</span>
+            Montar um Bom Currículo{' '}
+            <span className="gradient-text">Leva Horas</span>
           </h2>
           <p className="text-body-l text-text-secondary">
-            O processo seletivo mudou. Empresas usam inteligencia artificial para
-            analisar candidatos antes mesmo de um humano ver seu perfil. Seu
-            curriculo precisa estar preparado.
+            Você sabe que precisa de um currículo atualizado, mas o processo
+            manual é lento, repetitivo e nunca mostra seu verdadeiro potencial.
           </p>
         </div>
 

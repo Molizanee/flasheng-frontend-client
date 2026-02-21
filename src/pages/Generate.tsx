@@ -9,6 +9,7 @@ import PixPayment from '../components/PixPayment'
 import GenerationProgress from '../components/GenerationProgress'
 import Button from '../components/ui/Button'
 import { ArrowLeft, Zap, Check, XCircle } from 'lucide-react'
+import { CoreLogo } from '../components/CoreLogo'
 
 type Step = 'options' | 'payment' | 'generating' | 'complete' | 'error'
 
@@ -22,7 +23,7 @@ interface SavedResume {
   githubUsername?: string | null
 }
 
-const RESUMES_KEY = 'flasheng_resumes'
+const RESUMES_KEY = 'core_resumes'
 
 function saveResume(resume: SavedResume) {
   const existing = JSON.parse(localStorage.getItem(RESUMES_KEY) || '[]') as SavedResume[]
@@ -31,7 +32,7 @@ function saveResume(resume: SavedResume) {
 }
 
 export default function Generate() {
-  const { providerToken, session } = useAuth()
+  const { providerToken, session, signOut } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const planId = searchParams.get('plan')
@@ -58,8 +59,8 @@ export default function Generate() {
     const opts = options ?? generationOptions
 
     if (!providerToken) {
-      setErrorMsg('Token do GitHub nao encontrado. Faca login novamente.')
-      setStep('error')
+      await signOut()
+      navigate('/login')
       return
     }
 
@@ -78,10 +79,10 @@ export default function Generate() {
       setJobId(result.job_id)
       setStep('generating')
     } catch (err) {
-      setErrorMsg(err instanceof Error ? err.message : 'Erro ao iniciar geracao')
+      setErrorMsg(err instanceof Error ? err.message : 'Erro ao iniciar geração')
       setStep('error')
     }
-  }, [providerToken, session, generationOptions])
+  }, [providerToken, session, generationOptions, signOut, navigate])
 
   const handlePaymentConfirmed = useCallback(async () => {
     if (!session?.access_token) return
@@ -96,9 +97,9 @@ export default function Generate() {
 
   const handleOptionsContinue = (options: GenerationOptions) => {
     setGenerationOptions(options)
-    
+
     if (creditsLoading) return
-    
+
     if (credits > 0) {
       handleStartGeneration(options)
     } else {
@@ -135,18 +136,18 @@ export default function Generate() {
 
   const stepIndicators = hasCredits
     ? [
-        { key: 'options', label: 'Opções' },
-        { key: 'generating', label: 'Geração' },
-      ]
+      { key: 'options', label: 'Opções' },
+      { key: 'generating', label: 'Geração' },
+    ]
     : [
-        { key: 'options', label: 'Opções' },
-        { key: 'payment', label: 'Pagamento' },
-        { key: 'generating', label: 'Geração' },
-      ]
+      { key: 'options', label: 'Opções' },
+      { key: 'payment', label: 'Pagamento' },
+      { key: 'generating', label: 'Geração' },
+    ]
 
   const currentStepIndex =
     step === 'options' ? 0 :
-    step === 'payment' || step === 'generating' ? (hasCredits ? 1 : 2) : 0
+      step === 'payment' || step === 'generating' ? (hasCredits ? 1 : 2) : 0
 
   return (
     <div className="dot-grid relative min-h-screen bg-bg-void">
@@ -171,12 +172,7 @@ export default function Generate() {
 
         {/* Logo */}
         <div className="mb-6 flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-accent-primary to-accent-secondary">
-            <Zap className="h-6 w-6 text-text-primary" />
-          </div>
-          <span className="font-display text-2xl font-bold text-text-primary">
-            Flash<span className="text-text-accent">Eng</span>
-          </span>
+          <CoreLogo />
         </div>
 
         {/* Step indicators */}
@@ -186,31 +182,28 @@ export default function Generate() {
               <div key={s.key} className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
                   <div
-                    className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors ${
-                      i <= currentStepIndex
-                        ? 'bg-accent-primary text-text-primary'
-                        : 'bg-bg-subtle text-text-disabled'
-                    }`}
+                    className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors ${i <= currentStepIndex
+                      ? 'bg-accent-primary text-text-primary'
+                      : 'bg-bg-subtle text-text-disabled'
+                      }`}
                   >
                     {i + 1}
                   </div>
                   <span
-                    className={`text-body-s ${
-                      i <= currentStepIndex
-                        ? 'text-text-primary'
-                        : 'text-text-disabled'
-                    }`}
+                    className={`text-body-s ${i <= currentStepIndex
+                      ? 'text-text-primary'
+                      : 'text-text-disabled'
+                      }`}
                   >
                     {s.label}
                   </span>
                 </div>
                 {i < stepIndicators.length - 1 && (
                   <div
-                    className={`h-px w-8 ${
-                      i < currentStepIndex
-                        ? 'bg-accent-primary'
-                        : 'bg-border-faint'
-                    }`}
+                    className={`h-px w-8 ${i < currentStepIndex
+                      ? 'bg-accent-primary'
+                      : 'bg-border-faint'
+                      }`}
                   />
                 )}
               </div>
@@ -268,7 +261,7 @@ export default function Generate() {
                 <XCircle className="h-8 w-8 text-danger" />
               </div>
               <h2 className="text-h2 mb-3 text-text-primary">
-                Erro na Geracao
+                Erro na Geração
               </h2>
               <p className="mb-6 text-body-s text-text-tertiary">{errorMsg}</p>
               <div className="flex flex-col gap-3">

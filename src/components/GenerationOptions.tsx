@@ -125,6 +125,26 @@ export default function GenerationOptionsForm({
         <div className="flex flex-col gap-3">
           <button
             type="button"
+            onClick={() => setPlatformContent('mixed')}
+            className={`flex items-center gap-3 rounded-lg border-2 p-4 transition-all ${
+              platformContent === 'mixed'
+                ? 'border-primary bg-primary-subtle'
+                : 'border-border-default hover:border-primary/50'
+            }`}
+          >
+            <Layers className="h-5 w-5 text-text-tertiary" />
+            <div className="text-left">
+              <p className="text-body-m font-medium text-text-primary">
+                Equilibrado (Recomendado)
+              </p>
+              <p className="text-body-xs text-text-tertiary">
+                Combina LinkedIn + GitHub
+              </p>
+            </div>
+          </button>
+          
+          <button
+            type="button"
             onClick={() => setPlatformContent('linkedin')}
             className={`flex items-center gap-3 rounded-lg border-2 p-4 transition-all ${
               platformContent === 'linkedin'
@@ -161,27 +181,7 @@ export default function GenerationOptionsForm({
                 Foco no conteúdo do GitHub
               </p>
             </div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setPlatformContent('mixed')}
-            className={`flex items-center gap-3 rounded-lg border-2 p-4 transition-all ${
-              platformContent === 'mixed'
-                ? 'border-primary bg-primary-subtle'
-                : 'border-border-default hover:border-primary/50'
-            }`}
-          >
-            <Layers className="h-5 w-5 text-text-tertiary" />
-            <div className="text-left">
-              <p className="text-body-m font-medium text-text-primary">
-                Mixto (Recomendado)
-              </p>
-              <p className="text-body-xs text-text-tertiary">
-                Combina LinkedIn + GitHub
-              </p>
-            </div>
-          </button>
+          </button>          
         </div>
       </div>
 
