@@ -1,6 +1,6 @@
 import { useAuth } from '../contexts/AuthContext'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, Zap, Github } from 'lucide-react'
+import { ArrowLeft, Github } from 'lucide-react'
 import { CoreLogo } from '../components/CoreLogo'
 
 export default function Login() {
@@ -34,7 +34,7 @@ export default function Login() {
 
         {/* Logo */}
         <div className="mb-8 flex items-center gap-2">
-          <CoreLogo/>
+          <CoreLogo />
         </div>
 
         <div className="glass-card w-full max-w-md rounded-xl p-8 md:p-10">

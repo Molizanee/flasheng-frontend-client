@@ -8,7 +8,8 @@ import { type GenerationOptions, defaultGenerationOptions } from '../lib/generat
 import PixPayment from '../components/PixPayment'
 import GenerationProgress from '../components/GenerationProgress'
 import Button from '../components/ui/Button'
-import { ArrowLeft, Zap, Check, XCircle } from 'lucide-react'
+import { ArrowLeft, Check, XCircle } from 'lucide-react'
+import type { CreditPlanResponse } from '../lib/api'
 import { CoreLogo } from '../components/CoreLogo'
 
 type Step = 'options' | 'payment' | 'generating' | 'complete' | 'error'
@@ -36,6 +37,7 @@ export default function Generate() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const planId = searchParams.get('plan')
+  const [selectedPlan, setSelectedPlan] = useState<CreditPlanResponse | null>(null)
 
   const [step, setStep] = useState<Step>('options')
   const [jobId, setJobId] = useState<string | null>(null)
@@ -95,7 +97,7 @@ export default function Generate() {
     handleStartGeneration()
   }, [session, handleStartGeneration])
 
-  const handleOptionsContinue = (options: GenerationOptions) => {
+  const handleOptionsContinue = async (options: GenerationOptions) => {
     setGenerationOptions(options)
 
     if (creditsLoading) return
@@ -103,7 +105,23 @@ export default function Generate() {
     if (credits > 0) {
       handleStartGeneration(options)
     } else {
-      setStep('payment')
+      // Fetch default plan for payment
+      try {
+        if (session?.access_token) {
+          const plans = await api.getCreditPlans()
+          const plan = planId
+            ? plans.find((p) => p.id === planId) || plans[0]
+            : plans[0]
+          if (plan) {
+            setSelectedPlan(plan)
+            setStep('payment')
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch plans:', err)
+        setErrorMsg('Erro ao carregar planos de pagamento')
+        setStep('error')
+      }
     }
   }
 
@@ -224,11 +242,11 @@ export default function Generate() {
             />
           )}
 
-          {step === 'payment' && (
+          {step === 'payment' && selectedPlan && (
             <PixPayment
               onPaymentConfirmed={handlePaymentConfirmed}
               token={session?.access_token ?? ''}
-              initialPlanId={planId || undefined}
+              plan={selectedPlan}
             />
           )}
 
