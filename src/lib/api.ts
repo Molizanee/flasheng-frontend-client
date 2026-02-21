@@ -19,7 +19,7 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
 
   // Attach Bearer token when provided
   if (token) {
-    ;(config.headers as Record<string, string>)['Authorization'] = `Bearer ${token}`
+    ; (config.headers as Record<string, string>)['Authorization'] = `Bearer ${token}`
   }
 
   if (body) {
@@ -187,6 +187,13 @@ export const api = {
 
   getUserProfile(token: string): Promise<UserProfileResponse> {
     return request('/api/v1/users/me', { token })
+  },
+
+  createUser(token: string): Promise<UserProfileResponse> {
+    return request('/api/v1/users/', {
+      method: 'POST',
+      token,
+    })
   },
 
   updateUserProfile(

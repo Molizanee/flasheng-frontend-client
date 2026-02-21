@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      async (event, session) => {
         setSession(session)
         setUser(session?.user ?? null)
 
@@ -72,6 +72,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (session?.provider_token) {
           localStorage.setItem(PROVIDER_TOKEN_KEY, session.provider_token)
           setProviderToken(session.provider_token)
+        }
+
+        if (event === 'SIGNED_IN' && session?.access_token) {
+          try {
+            await api.createUser(session.access_token)
+          } catch (err) {
+            console.error('Failed to create user on backend:', err)
+          }
         }
 
         if (!session) {

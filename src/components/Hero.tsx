@@ -2,6 +2,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { Linkedin, Github, Sparkles } from "lucide-react";
 import Badge from "./ui/Badge";
 import Button from "./ui/Button";
+import ResumeShowcase from "./ResumeShowcase";
 
 export default function Hero() {
   const { user } = useAuth();
@@ -65,6 +66,11 @@ export default function Hero() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Animated Resume Showcase */}
+        <div className="animate-fade-in-up animation-delay-700 mt-16 md:mt-24 w-full">
+          <ResumeShowcase />
         </div>
       </div>
 

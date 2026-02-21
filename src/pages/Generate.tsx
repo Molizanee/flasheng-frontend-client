@@ -178,10 +178,10 @@ export default function Generate() {
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-20">
         {/* Back link */}
         <Link
-          to={step === 'generating' || step === 'payment' ? '#' : '/dashboard'}
+          to={step === 'generating' ? '#' : '/dashboard'}
           className="mb-10 flex items-center gap-2 text-body-s text-text-tertiary transition-colors hover:text-text-secondary"
           onClick={(e) => {
-            if (step === 'generating' || step === 'payment') e.preventDefault()
+            if (step === 'generating') e.preventDefault()
           }}
         >
           <ArrowLeft className="h-4 w-4" />

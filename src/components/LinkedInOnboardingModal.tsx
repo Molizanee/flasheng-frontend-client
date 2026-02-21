@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { z } from 'zod'
-import { Linkedin, Loader2, Check } from 'lucide-react'
+import { Linkedin, Check } from 'lucide-react'
 import Button from '../components/ui/Button'
 
 const linkedinUrlSchema = z
@@ -98,16 +98,10 @@ export default function LinkedInOnboardingModal({ onSubmit }: LinkedInOnboarding
                 size="lg"
                 variant="primary"
                 className="w-full"
-                disabled={loading || !linkedinUrl.trim()}
+                disabled={!linkedinUrl.trim()}
+                loading={loading}
               >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Salvando...
-                  </>
-                ) : (
-                  'Continuar'
-                )}
+                {loading ? 'Salvando...' : 'Continuar'}
               </Button>
             </form>
           )}
