@@ -9,6 +9,7 @@ interface AuthContextType {
   providerToken: string | null
   userProfile: UserProfileResponse | null
   loading: boolean
+  profileLoading: boolean
   signInWithGitHub: () => Promise<void>
   signOut: () => Promise<void>
   fetchUserProfile: () => Promise<void>
@@ -27,14 +28,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   )
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null)
   const [loading, setLoading] = useState(!!supabase) // only loading if supabase is configured
+  const [profileLoading, setProfileLoading] = useState(true)
 
   const fetchUserProfile = useCallback(async () => {
-    if (!session?.access_token) return
+    if (!session?.access_token) {
+      setProfileLoading(false)
+      return
+    }
+    setProfileLoading(true)
     try {
       const profile = await api.getUserProfile(session.access_token)
       setUserProfile(profile)
     } catch (err) {
       console.error('Failed to fetch user profile:', err)
+    } finally {
+      setProfileLoading(false)
     }
   }, [session])
 
@@ -138,6 +146,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         providerToken,
         userProfile,
         loading,
+        profileLoading,
         signInWithGitHub,
         signOut,
         fetchUserProfile,

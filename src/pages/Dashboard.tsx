@@ -3,7 +3,6 @@ import { useResumes, useCredits } from "../hooks/useResumes";
 import { useAuth } from "../contexts/AuthContext";
 import DashboardNavbar from "../components/dashboard/DashboardNavbar";
 import ResumeGrid from "../components/dashboard/ResumeGrid";
-import LinkedInOnboardingModal from "../components/LinkedInOnboardingModal";
 import PixPayment from "../components/PixPayment";
 import Button from "../components/ui/Button";
 import Footer from "../components/Footer";
@@ -13,14 +12,13 @@ import { api, type CreditPlanResponse } from "../lib/api";
 export default function Dashboard() {
   const { resumes, loading, error, refresh } = useResumes();
   const { credits, refresh: refreshCredits } = useCredits();
-  const { userProfile, updateUserProfile, session } = useAuth();
+  const { session } = useAuth();
   const [activeSection, setActiveSection] = useState<"resumes" | "credits">(
     "resumes",
   );
   const [plans, setPlans] = useState<CreditPlanResponse[]>([]);
   const [plansLoading, setPlansLoading] = useState(true);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   useEffect(() => {
@@ -37,12 +35,6 @@ export default function Dashboard() {
       .catch(console.error)
       .finally(() => setPlansLoading(false));
   }, [activeSection]);
-
-  useEffect(() => {
-    if (userProfile && !userProfile.linkedin_url) {
-      setShowOnboarding(true);
-    }
-  }, [userProfile]);
 
   const formatPrice = (cents: number) => (cents / 100).toFixed(2).replace('.', ',');
 
@@ -184,15 +176,6 @@ export default function Dashboard() {
       </main>
 
       <Footer />
-
-      {showOnboarding && (
-        <LinkedInOnboardingModal
-          onSubmit={async (url) => {
-            await updateUserProfile({ linkedin_url: url })
-            setShowOnboarding(false)
-          }}
-        />
-      )}
 
       {showPaymentModal && session && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">

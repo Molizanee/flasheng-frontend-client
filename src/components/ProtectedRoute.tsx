@@ -1,15 +1,16 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import LinkedInOnboardingModal from './LinkedInOnboardingModal'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { user, loading } = useAuth()
+  const { user, userProfile, loading, profileLoading, updateUserProfile } = useAuth()
   const location = useLocation()
 
-  if (loading) {
+  if (loading || (user && profileLoading)) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-dark-900">
         <svg
@@ -37,6 +38,18 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />
+  }
+
+  if (userProfile && !userProfile.linkedin_url) {
+    return (
+      <div className="min-h-screen bg-bg-void">
+        <LinkedInOnboardingModal
+          onSubmit={async (url) => {
+            await updateUserProfile({ linkedin_url: url })
+          }}
+        />
+      </div>
+    )
   }
 
   return <>{children}</>
