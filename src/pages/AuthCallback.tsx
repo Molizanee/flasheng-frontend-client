@@ -24,7 +24,7 @@ export default function AuthCallback() {
 
         if (session) {
           // provider_token is captured by AuthContext's onAuthStateChange listener
-          navigate('/generate', { replace: true })
+          navigate('/dashboard', { replace: true })
         } else {
           setError('Nao foi possivel autenticar. Tente novamente.')
         }

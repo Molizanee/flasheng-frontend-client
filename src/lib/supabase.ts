@@ -9,7 +9,7 @@ if (supabaseUrl && supabaseAnonKey) {
   supabase = createClient(supabaseUrl, supabaseAnonKey)
 } else {
   console.warn(
-    '[FlashEng] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY. ' +
+    '[core] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY. ' +
       'Authentication is disabled. Set these in your .env file to enable login.'
   )
 }

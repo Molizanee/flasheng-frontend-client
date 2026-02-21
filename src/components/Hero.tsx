@@ -7,7 +7,7 @@ export default function Hero() {
   const { user } = useAuth();
   const ctaLink = user ? "/generate" : "/login";
   return (
-    <section className="dot-grid relative min-h-screen overflow-hidden pt-32 pb-20">
+    <section className="dot-grid relative min-h-screen overflow-hidden pt-24 pb-12 md:pt-32 md:pb-20">
       {/* Background glow effects */}
       <div className="hero-glow top-[-200px] left-[20%] bg-accent-primary" />
       <div className="hero-glow top-[100px] right-[-100px] bg-accent-secondary" />
@@ -17,35 +17,35 @@ export default function Hero() {
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
           <div className="animate-fade-in-up mb-8 flex justify-center">
-            <Badge>Resumos Inteligentes para Profissionais de Tech</Badge>
+            <Badge>Currículos Automatizados com IA</Badge>
           </div>
 
           {/* Headline */}
           <h1 className="text-display-l animate-fade-in-up animation-delay-200 mb-6 md:text-display-xl">
-            Seu Curriculo{" "}
-            <span className="gradient-text">Otimizado Para o Futuro</span> do
-            Recrutamento
+            Seu Currículo Perfeito,{" "}
+            <span className="gradient-text">Gerado Automaticamente</span> do
+            LinkedIn e GitHub
           </h1>
 
           {/* Subtext */}
           <p className="text-body-l animate-fade-in-up animation-delay-400 mx-auto mb-10 max-w-2xl text-text-secondary md:text-lg">
-            Curriculos tradicionais do LinkedIn nao sao otimizados para os
-            processos seletivos modernos com agentes de IA analisando perfis. O
-            FlashEng gera um resumo profissional combinando seus dados mais
-            atualizados do GitHub e LinkedIn.
+            O core lê seu perfil público do LinkedIn — experiências, formação,
+            bio — e seu GitHub — commits, PRs, repositórios — e combina tudo
+            para gerar um currículo otimizado em português ou inglês, pronto
+            para você se candidatar em minutos.
           </p>
 
           {/* CTA Button */}
-          <div className="animate-fade-in-up animation-delay-600 mb-16">
+          <div className="animate-fade-in-up animation-delay-600 mb-10 md:mb-16">
             <Button to={ctaLink} size="xl" variant="primary">
-              Gerar Resumo Agora
+              Gerar Currículo Agora
             </Button>
           </div>
 
           {/* Trust line */}
           <div className="animate-fade-in-up animation-delay-600">
             <p className="text-label mb-6 text-text-disabled">
-              Integrando com as melhores plataformas
+              Integrado com as melhores plataformas
             </p>
             <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
               {/* LinkedIn */}

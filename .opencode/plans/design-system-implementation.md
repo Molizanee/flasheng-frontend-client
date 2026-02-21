@@ -1,7 +1,7 @@
 # Design System Implementation Plan
 
 ## Objective
-Implement the DevForge design PRD as the FlashEng design system foundation.
+Implement the DevForge design PRD as the core design system foundation.
 
 ## Scope: Design System Only
 - Design tokens (colors, typography, spacing, shadows, radii, motion)
@@ -55,5 +55,5 @@ Implement the DevForge design PRD as the FlashEng design system foundation.
 - No routing changes
 - No layout restructuring
 - No backend changes
-- Brand stays "FlashEng"
+- Brand stays "core"
 - Language stays Portuguese

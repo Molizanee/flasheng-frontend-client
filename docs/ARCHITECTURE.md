@@ -1,8 +1,8 @@
-# FlashEng - Arquitetura Frontend
+# core - Arquitetura Frontend
 
 ## Visao Geral
 
-O FlashEng e um gerador de resumos profissionais otimizados com IA, que combina dados do GitHub e do LinkedIn para criar curriculos prontos para processos seletivos modernos.
+O core e um gerador de resumos profissionais otimizados com IA, que combina dados do GitHub e do LinkedIn para criar curriculos prontos para processos seletivos modernos.
 
 Este documento descreve a arquitetura do frontend, os fluxos de usuario e a comunicacao com o backend.
 
@@ -37,13 +37,13 @@ src/
 │   └── AuthContext.tsx               # Provider de autenticacao + hook useAuth
 │
 ├── hooks/
-│   └── useResumes.ts                # Hooks para resumos e creditos (localStorage)
+│   └── useResumes.ts                # Hooks para resumos e créditos (localStorage)
 │
 ├── pages/
 │   ├── Landing.tsx                   # Landing page (publica)
 │   ├── Login.tsx                     # Pagina de login com GitHub
 │   ├── AuthCallback.tsx              # Processamento do callback OAuth
-│   ├── Generate.tsx                  # Wizard: Upload → PIX → Geracao
+│   ├── Generate.tsx                  # Wizard: Upload → PIX → Geração
 │   └── Dashboard.tsx                 # Dashboard com grid de resumos
 │
 ├── components/
@@ -63,7 +63,7 @@ src/
 │   │   ├── Badge.tsx                 # Badge/pill
 │   │   └── GlassCard.tsx             # Card com efeito glassmorphism
 │   └── dashboard/
-│       ├── DashboardNavbar.tsx        # Navbar do dashboard (tabs: Resumos | Creditos)
+│       ├── DashboardNavbar.tsx        # Navbar do dashboard (tabs: Resumos | Créditos)
 │       ├── ResumeGrid.tsx             # Grid responsivo de cards
 │       └── ResumeCard.tsx             # Card individual com preview + download
 ```
@@ -77,7 +77,7 @@ src/
 | `/` | `Landing` | Nao | Landing page de marketing |
 | `/login` | `Login` | Nao | Pagina de login com GitHub |
 | `/auth/callback` | `AuthCallback` | Nao | Callback do OAuth do Supabase |
-| `/generate` | `Generate` | Sim | Wizard de geracao de resumo |
+| `/generate` | `Generate` | Sim | Wizard de geração de resumo |
 | `/dashboard` | `Dashboard` | Sim | Dashboard do usuario |
 
 Rotas protegidas usam o componente `ProtectedRoute`, que verifica se o usuario esta autenticado via `useAuth()`. Se nao estiver, redireciona para `/login`.
@@ -110,7 +110,7 @@ Rotas protegidas usam o componente `ProtectedRoute`, que verifica se o usuario e
 2. **OAuth**: O Supabase redireciona para o GitHub OAuth com os scopes: `read:user`, `user:email`, `repo`.
 3. **Callback**: Apos autorizacao, o GitHub redireciona de volta para `/auth/callback`.
 4. **Captura de Tokens**: O `AuthContext` escuta `onAuthStateChange` e quando detecta `SIGNED_IN`:
-   - Salva o `provider_token` (GitHub access token) no `localStorage` com a chave `flasheng_github_provider_token`.
+   - Salva o `provider_token` (GitHub access token) no `localStorage` com a chave `core_github_provider_token`.
    - O `session.access_token` (JWT do Supabase) fica disponivel via `useAuth().session`.
 5. **Redirecionamento**: O usuario e redirecionado para `/generate`.
 
@@ -119,7 +119,7 @@ Rotas protegidas usam o componente `ProtectedRoute`, que verifica se o usuario e
 | Token | Onde fica | Para que serve |
 |---|---|---|
 | `session.access_token` | Memoria (Supabase SDK) | JWT do Supabase, identifica o usuario |
-| `provider_token` | `localStorage` (`flasheng_github_provider_token`) | Token de acesso do GitHub, usado para chamar a API do backend |
+| `provider_token` | `localStorage` (`core_github_provider_token`) | Token de acesso do GitHub, usado para chamar a API do backend |
 
 ### Seguranca
 
@@ -143,7 +143,7 @@ O arquivo `src/lib/api.ts` exporta um objeto `api` com metodos tipados para cada
 
 #### 1. `POST /api/v1/resume/generate`
 
-**Proposito**: Submeter um job de geracao de resumo.
+**Proposito**: Submeter um job de geração de resumo.
 
 **Request**:
 ```
@@ -163,11 +163,11 @@ Fields:
 }
 ```
 
-**Quando e chamado**: Apos o usuario fazer upload do PDF e pagar (ou ter creditos).
+**Quando e chamado**: Apos o usuario fazer upload do PDF e pagar (ou ter créditos).
 
 #### 2. `GET /api/v1/resume/{job_id}`
 
-**Proposito**: Verificar o status de um job de geracao (polling).
+**Proposito**: Verificar o status de um job de geração (polling).
 
 **Response** (200):
 ```json
@@ -217,7 +217,7 @@ Fields:
 
 ### Nota sobre Autenticacao no Backend
 
-Atualmente, o backend recebe o `github_token` (provider_token do GitHub) diretamente no body da requisicao de geracao. **Nao ha autenticacao por JWT do Supabase nos endpoints**.
+Atualmente, o backend recebe o `github_token` (provider_token do GitHub) diretamente no body da requisicao de geração. **Nao ha autenticacao por JWT do Supabase nos endpoints**.
 
 Para uma versao de producao, recomenda-se:
 1. Enviar o JWT do Supabase no header `Authorization: Bearer <token>`.
@@ -227,30 +227,30 @@ Para uma versao de producao, recomenda-se:
 
 ---
 
-## Sistema de Creditos (Mockado)
+## Sistema de Créditos (Mockado)
 
-O sistema de creditos esta **mockado no frontend** usando `localStorage`. Nao ha endpoints de backend para gerenciar creditos.
+O sistema de créditos esta **mockado no frontend** usando `localStorage`. Nao ha endpoints de backend para gerenciar créditos.
 
 ### Regras
 
-- 1 credito = 1 geracao de resumo
+- 1 credito = 1 geração de resumo
 - 1 credito = R$ 10,00
-- Creditos sao armazenados em `localStorage` com a chave `flasheng_credits`
+- Créditos sao armazenados em `localStorage` com a chave `core_credits`
 - Ao "pagar" via PIX (mockado), 1 credito e adicionado
-- Ao iniciar uma geracao, 1 credito e consumido
-- Se a geracao falhar, o credito e devolvido
+- Ao iniciar uma geração, 1 credito e consumido
+- Se a geração falhar, o credito e devolvido
 
 ### Chaves no localStorage
 
 | Chave | Tipo | Descricao |
 |---|---|---|
-| `flasheng_credits` | `number` (string) | Quantidade de creditos do usuario |
-| `flasheng_resumes` | `SavedResume[]` (JSON) | Lista de resumos gerados |
-| `flasheng_github_provider_token` | `string` | Token de acesso do GitHub |
+| `core_credits` | `number` (string) | Quantidade de créditos do usuario |
+| `core_resumes` | `SavedResume[]` (JSON) | Lista de resumos gerados |
+| `core_github_provider_token` | `string` | Token de acesso do GitHub |
 
 ### Para migrar para o backend
 
-Quando o backend implementar endpoints de creditos, sera necessario:
+Quando o backend implementar endpoints de créditos, sera necessario:
 1. Criar endpoints: `GET /api/v1/credits`, `POST /api/v1/credits/purchase`
 2. Substituir as funcoes `getCredits()`, `addCredit()`, `consumeCredit()` em `Generate.tsx` por chamadas a API
 3. Substituir o hook `useCredits()` em `useResumes.ts` por chamadas a API
@@ -286,7 +286,7 @@ Generate (/generate)
     ├── Step 1: Upload do PDF do LinkedIn
     ├── Step 2: Pagamento PIX (QR Code mockado)
     │   └── Auto-confirma em ~8 segundos
-    ├── Step 3: Geracao do resumo
+    ├── Step 3: Geração do resumo
     │   ├── POST /api/v1/resume/generate
     │   └── Polling GET /api/v1/resume/{job_id}
     │
@@ -295,7 +295,7 @@ Dashboard (/dashboard)
     │
     ├── Visualiza grid de resumos gerados
     ├── Baixa resumos em PDF ou HTML
-    ├── Ve creditos restantes
+    ├── Ve créditos restantes
     └── Gera novos resumos
 ```
 
@@ -314,8 +314,8 @@ Dashboard (/dashboard)
     ▼
 Generate (/generate)
     │
-    ├── Se tem creditos: pula pagamento
-    ├── Se nao tem creditos: paga via PIX
+    ├── Se tem créditos: pula pagamento
+    ├── Se nao tem créditos: paga via PIX
     └── Gera resumo normalmente
 ```
 

@@ -9,6 +9,7 @@
   /* ── Font Families ── */
   --font-display: "Syne", sans-serif;
   --font-sans: "DM Sans", sans-serif;
+  --font-rethink: "Rethink Sans", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
   /* ── Background Layer Stack (Dark Theme) ── */
@@ -205,6 +206,30 @@ body {
   font-weight: 400;
   font-size: 13px;
   line-height: 1.6;
+}
+
+/* ============================================================
+   RESPONSIVE TYPOGRAPHY — Mobile overrides
+   ============================================================ */
+
+@media (max-width: 767px) {
+  .text-display-xl {
+    font-size: 36px;
+    letter-spacing: -1px;
+  }
+
+  .text-display-l {
+    font-size: 30px;
+    letter-spacing: -0.75px;
+  }
+
+  .text-h1 {
+    font-size: 26px;
+  }
+
+  .text-h2 {
+    font-size: 20px;
+  }
 }
 
 /* ============================================================

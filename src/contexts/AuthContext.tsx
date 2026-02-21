@@ -17,7 +17,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const PROVIDER_TOKEN_KEY = 'flasheng_github_provider_token'
+const PROVIDER_TOKEN_KEY = 'core_github_provider_token'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)

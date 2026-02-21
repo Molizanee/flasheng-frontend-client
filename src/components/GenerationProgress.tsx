@@ -68,7 +68,7 @@ export default function GenerationProgress({
   }, [pollStatus])
 
   const statusMessages: Record<string, string> = {
-    pending: 'Preparando geracao...',
+    pending: 'Preparando geração...',
     processing: 'Analisando seus dados do GitHub e LinkedIn...',
     completed: 'Resumo gerado com sucesso!',
     failed: 'Erro ao gerar resumo',

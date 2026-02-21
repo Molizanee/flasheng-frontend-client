@@ -6,28 +6,28 @@ const steps = [
     number: '01',
     title: 'Conecte',
     description:
-      'Informe seu perfil LinkedIn e seu usuario GitHub. E so isso que precisamos para comecar.',
+      'Informe seu perfil público do LinkedIn e seu usuário do GitHub. É só isso que precisamos para começar.',
     icon: <LogIn className="h-8 w-8" />,
   },
   {
     number: '02',
-    title: 'Analise',
+    title: 'Extraímos',
     description:
-      'Nosso motor de IA analisa seus repositorios, commits, READMEs e seu perfil profissional completo.',
+      'Nosso motor de IA lê seu LinkedIn — experiências, formação, bio, habilidades — e seu GitHub — repositórios, commits, PRs — automaticamente.',
     icon: <Search className="h-8 w-8" />,
   },
   {
     number: '03',
     title: 'Receba',
     description:
-      'Receba seu resumo profissional otimizado para processos seletivos com agentes de IA e recrutadores.',
+      'Receba seu currículo otimizado em português ou inglês, pronto para se candidatar a novas vagas em minutos.',
     icon: <FileText className="h-8 w-8" />,
   },
 ]
 
 export default function HowItWorks() {
   return (
-    <section id="como-funciona" className="relative py-24">
+    <section id="como-funciona" className="relative py-12 md:py-24">
       {/* Subtle background accent */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-1/2 left-1/2 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-primary/5 blur-[120px]" />
@@ -37,11 +37,11 @@ export default function HowItWorks() {
         <div className="mb-16 text-center">
           <Badge className="mb-6">Como Funciona</Badge>
           <h2 className="text-h1 mb-6 md:text-display-l">
-            Tres Passos Para Seu{' '}
-            <span className="gradient-text">Resumo Perfeito</span>
+            Três Passos Para Seu{' '}
+            <span className="gradient-text">Currículo Perfeito</span>
           </h2>
           <p className="text-body-l mx-auto max-w-2xl text-text-secondary">
-            Simples, rapido e poderoso. Conecte suas contas e deixe a IA fazer o
+            Simples, rápido e poderoso. Conecte suas contas e deixe a IA fazer o
             trabalho pesado.
           </p>
         </div>

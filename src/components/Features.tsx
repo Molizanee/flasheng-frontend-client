@@ -1,4 +1,4 @@
-import { Github, Linkedin, Sparkles, TrendingUp } from 'lucide-react'
+import { Github, Linkedin, Languages, TrendingUp } from 'lucide-react'
 import Badge from './ui/Badge'
 import GlassCard from './ui/GlassCard'
 
@@ -7,47 +7,47 @@ const features = [
     icon: <Github className="h-7 w-7" />,
     title: 'Dados Reais do GitHub',
     description:
-      'Repositorios, commits, pull requests e READMEs analisados para extrair suas habilidades tecnicas reais e contribuicoes mais recentes.',
+      'Repositórios, commits, pull requests e READMEs analisados para extrair suas habilidades técnicas reais e contribuições mais recentes.',
   },
   {
     icon: <Linkedin className="h-7 w-7" />,
     title: 'Perfil LinkedIn Integrado',
     description:
-      'Experiencia profissional, formacao, certificacoes e recomendacoes do seu perfil LinkedIn integrados automaticamente.',
+      'Experiência profissional, formação, certificações e recomendações do seu perfil público do LinkedIn integrados automaticamente.',
   },
   {
-    icon: <Sparkles className="h-7 w-7" />,
-    title: 'Otimizado para Agentes de IA',
+    icon: <Languages className="h-7 w-7" />,
+    title: 'Português ou Inglês',
     description:
-      'Formatacao e estrutura projetadas para que agentes de IA de recrutamento consigam interpretar e ranquear seu perfil com precisao.',
+      'Gere seu currículo no idioma que precisar com um clique. Ideal para se candidatar a vagas nacionais e internacionais.',
   },
   {
     icon: <TrendingUp className="h-7 w-7" />,
     title: 'Sempre Atualizado',
     description:
-      'Baseado nos seus dados mais recentes. Cada novo commit, projeto ou atualizacao no LinkedIn e refletida no seu resumo.',
+      'Baseado nos seus dados mais recentes. Cada novo commit, projeto ou atualização no LinkedIn é refletida no seu currículo automaticamente.',
   },
 ]
 
 export default function Features() {
   return (
-    <section id="diferenciais" className="relative py-24">
+    <section id="diferenciais" className="relative py-12 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-16 text-center">
           <Badge className="mb-6">Diferenciais</Badge>
           <h2 className="text-h1 mb-6 md:text-display-l">
-            Construido Para{' '}
-            <span className="gradient-text">Destacar Voce</span>
+            Por Que Usar o{' '}
+            <span className="gradient-text">core</span>
           </h2>
           <p className="text-body-l mx-auto max-w-2xl text-text-secondary">
-            Cada detalhe foi pensado para criar o resumo profissional mais
-            completo e otimizado possivel.
+            Cada detalhe foi pensado para criar o currículo profissional mais
+            completo e otimizado possível.
           </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
           {features.map((feature, i) => (
-            <GlassCard key={i} className="flex gap-5 p-8">
+            <GlassCard key={i} className="flex flex-col gap-4 p-5 sm:flex-row sm:gap-5 md:p-8">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-accent-subtle text-accent-secondary">
                 {feature.icon}
               </div>

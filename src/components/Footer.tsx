@@ -1,19 +1,14 @@
 import { Link } from 'react-router-dom'
-import { Zap } from 'lucide-react'
+import { CoreLogo } from './CoreLogo'
 
 export default function Footer() {
   return (
     <footer className="border-t border-border-faint py-12">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+        <div className="flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-accent-primary to-accent-secondary">
-              <Zap className="h-4 w-4 text-white" strokeWidth={2.5} />
-            </div>
-            <span className="font-display text-lg font-bold text-text-primary">
-              Flash<span className="text-accent-secondary">Eng</span>
-            </span>
+            <CoreLogo />
           </Link>
 
           {/* Links */}
@@ -38,9 +33,14 @@ export default function Footer() {
             </a>
           </div>
 
+          {/* Suporte */}
+          <p className="text-body-s text-text-disabled">
+            Suporte: david.molizane@icloud.com
+          </p>
+
           {/* Copyright */}
           <p className="text-body-s text-text-disabled">
-            &copy; {new Date().getFullYear()} FlashEng. Todos os direitos
+            &copy; {new Date().getFullYear()} core. Todos os direitos
             reservados.
           </p>
         </div>
